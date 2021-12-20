@@ -1,0 +1,11 @@
+query MovieDetail($identifier: Int!){
+  movie(id: $identifier) {
+    title, voteAverage, posterPath, overview, genres,
+    cast {
+        name
+    },
+    director {
+        name
+    }
+  }
+}

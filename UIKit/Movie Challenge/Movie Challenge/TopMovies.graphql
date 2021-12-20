@@ -1,0 +1,6 @@
+query TopMoviesQuery($limit: Int) {
+  movies(limit: $limit, orderBy: "voteAverage", sort: DESC) {
+    id, title, voteAverage, posterPath
+    
+  }
+}

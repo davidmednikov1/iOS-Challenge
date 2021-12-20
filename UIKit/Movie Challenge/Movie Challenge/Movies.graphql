@@ -1,5 +1,5 @@
 query GetMoviesQuery {
   movies {
-    title
+    id, title, voteAverage, posterPath
   }
 }

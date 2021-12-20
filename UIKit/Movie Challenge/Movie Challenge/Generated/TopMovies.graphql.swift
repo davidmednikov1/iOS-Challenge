@@ -4,12 +4,12 @@
 import Apollo
 import Foundation
 
-public final class GetMoviesQueryQuery: GraphQLQuery {
+public final class TopMoviesQueryQuery: GraphQLQuery {
   /// The raw GraphQL definition of this operation.
   public let operationDefinition: String =
     """
-    query GetMoviesQuery {
-      movies {
+    query TopMoviesQuery($limit: Int) {
+      movies(limit: $limit, orderBy: "voteAverage", sort: DESC) {
         __typename
         id
         title
@@ -19,9 +19,16 @@ public final class GetMoviesQueryQuery: GraphQLQuery {
     }
     """
 
-  public let operationName: String = "GetMoviesQuery"
+  public let operationName: String = "TopMoviesQuery"
 
-  public init() {
+  public var limit: Int?
+
+  public init(limit: Int? = nil) {
+    self.limit = limit
+  }
+
+  public var variables: GraphQLMap? {
+    return ["limit": limit]
   }
 
   public struct Data: GraphQLSelectionSet {
@@ -29,7 +36,7 @@ public final class GetMoviesQueryQuery: GraphQLQuery {
 
     public static var selections: [GraphQLSelection] {
       return [
-        GraphQLField("movies", type: .list(.object(Movie.selections))),
+        GraphQLField("movies", arguments: ["limit": GraphQLVariable("limit"), "orderBy": "voteAverage", "sort": "DESC"], type: .list(.object(Movie.selections))),
       ]
     }
 

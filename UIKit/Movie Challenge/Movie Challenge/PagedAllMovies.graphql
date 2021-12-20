@@ -1,0 +1,6 @@
+query PagedAllMovies($limit: Int, $offset: Int, $orderBy: String, $sort: Sort, $genre: String, $search: String){
+  movies(limit: $limit, offset: $offset, orderBy: $orderBy, sort: $sort, genre: $genre, search: $search) {
+    id, title, voteAverage, posterPath
+    
+  }
+}

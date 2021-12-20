@@ -4,12 +4,19 @@
 import Apollo
 import Foundation
 
-public final class GetMoviesQueryQuery: GraphQLQuery {
+public final class PagedAllMoviesQuery: GraphQLQuery {
   /// The raw GraphQL definition of this operation.
   public let operationDefinition: String =
     """
-    query GetMoviesQuery {
-      movies {
+    query PagedAllMovies($limit: Int, $offset: Int, $orderBy: String, $sort: Sort, $genre: String, $search: String) {
+      movies(
+        limit: $limit
+        offset: $offset
+        orderBy: $orderBy
+        sort: $sort
+        genre: $genre
+        search: $search
+      ) {
         __typename
         id
         title
@@ -19,9 +26,26 @@ public final class GetMoviesQueryQuery: GraphQLQuery {
     }
     """
 
-  public let operationName: String = "GetMoviesQuery"
+  public let operationName: String = "PagedAllMovies"
 
-  public init() {
+  public var limit: Int?
+  public var offset: Int?
+  public var orderBy: String?
+  public var sort: Sort?
+  public var genre: String?
+  public var search: String?
+
+  public init(limit: Int? = nil, offset: Int? = nil, orderBy: String? = nil, sort: Sort? = nil, genre: String? = nil, search: String? = nil) {
+    self.limit = limit
+    self.offset = offset
+    self.orderBy = orderBy
+    self.sort = sort
+    self.genre = genre
+    self.search = search
+  }
+
+  public var variables: GraphQLMap? {
+    return ["limit": limit, "offset": offset, "orderBy": orderBy, "sort": sort, "genre": genre, "search": search]
   }
 
   public struct Data: GraphQLSelectionSet {
@@ -29,7 +53,7 @@ public final class GetMoviesQueryQuery: GraphQLQuery {
 
     public static var selections: [GraphQLSelection] {
       return [
-        GraphQLField("movies", type: .list(.object(Movie.selections))),
+        GraphQLField("movies", arguments: ["limit": GraphQLVariable("limit"), "offset": GraphQLVariable("offset"), "orderBy": GraphQLVariable("orderBy"), "sort": GraphQLVariable("sort"), "genre": GraphQLVariable("genre"), "search": GraphQLVariable("search")], type: .list(.object(Movie.selections))),
       ]
     }
 
